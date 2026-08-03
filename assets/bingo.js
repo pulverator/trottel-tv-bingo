@@ -89,7 +89,8 @@ function shuffle(array) {
  * Lädt .txt Datei, entfernt Duplikate automatisch.
  */
 async function loadCollection(id) {
-  const response = await fetch(`collections/${id}.txt`);
+  const cacheBust = `?v=${Date.now()}`;
+  const response  = await fetch(`collections/${id}.txt${cacheBust}`);
   const text     = await response.text();
   const lines    = text
     .split('\n')
