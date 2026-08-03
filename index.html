@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <!--
+    ============================================================
+    Trottel-TV Bingo
+    Version: 2026-08-03 10:30
+    ============================================================
+  -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trottel-TV Bingo</title>
@@ -8,50 +14,44 @@
 </head>
 <body>
 
-  <!-- ============================================================
-       STARTSEITE
-       ============================================================ -->
-  <div id="start-screen">
-    <div class="logo">BINGO</div>
-    <div class="tagline">Jede Karte ist einmalig</div>
-    <button class="start-btn" onclick="startGame()">Bingo starten</button>
-    <p class="hint">Die 25 Felder werden zufällig gemischt</p>
+  <!-- STARTSEITE -->
+  <div id="start-screen" class="start-screen">
+    <div class="start-screen__logo">BINGO</div>
+    <div class="start-screen__tagline">Jede Karte ist einmalig</div>
+    <button class="start-screen__btn" onclick="startGame()">Bingo starten</button>
+    <p class="start-screen__hint">Die 25 Felder werden zufällig gemischt</p>
   </div>
 
 
-  <!-- ============================================================
-       SPIELSEITE
-       ============================================================ -->
-  <div id="game-screen">
+  <!-- SPIELSEITE -->
+  <div id="game-screen" class="game-screen">
 
     <div class="game-header">
-      <div class="game-logo">Trottel-TV Bingo</div>
-      <button class="new-card-btn" onclick="newCard()">↺ Neue Karte</button>
+      <div class="game-header__logo">Trottel-TV Bingo</div>
+      <button class="game-header__btn" onclick="newCard()">↺ Neue Karte</button>
     </div>
 
     <!--
       data-center-label: Text im fixen Mittelfeld.
       Hier anpassen wenn du den Mittelfeld-Text ändern möchtest.
     -->
-    <div class="bingo-grid"
+    <div class="bingo-card"
          id="grid"
          data-center-label="Trottel-TV Bingo!">
     </div>
 
     <div class="counter">
-      <span id="marked-count">0</span> von 24 Feldern markiert
+      <span class="counter__value" id="marked-count">0</span> von 24 Feldern markiert
     </div>
 
   </div>
 
 
-  <!-- ============================================================
-       GEWINN-BANNER (Overlay)
-       ============================================================ -->
-  <div id="bingo-banner">
-    <div class="banner-text">BINGO!</div>
-    <div class="banner-sub">Glückwunsch! 🎉</div>
-    <button class="dismiss-btn" onclick="dismissBanner()">Weiter spielen</button>
+  <!-- GEWINN-BANNER (Overlay) -->
+  <div id="bingo-banner" class="banner">
+    <div class="banner__text">BINGO!</div>
+    <div class="banner__sub">Glückwunsch! 🎉</div>
+    <button class="banner__btn" onclick="dismissBanner()">Weiter spielen</button>
   </div>
 
 

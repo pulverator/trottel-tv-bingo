@@ -1,12 +1,14 @@
 /**
  * ============================================================
  *  Trottel-TV Bingo – Spiellogik
+ *  Version: 2026-08-03 10:30
  * ============================================================
  *
  *  BEGRIFFE ANPASSEN:
  *  Einfach die Einträge im TERMS-Array unten bearbeiten.
  *  Es müssen genau 24 Begriffe sein (das Mittelfeld zählt nicht).
- *  Der Text im Mittelfeld wird in index.html gesetzt (class="center").
+ *  Der Text im Mittelfeld wird in index.html via
+ *  data-center-label="..." gesetzt.
  *
  * ============================================================
  */
@@ -53,6 +55,15 @@ const TERMS = [
 // Position des fixen Mittelfeldes im 5×5-Raster (0-basiert, 12 = Mitte)
 const CENTER_INDEX = 12;
 
+// BEM-Klassen (hier zentral damit JS und CSS synchron bleiben)
+const CLASS = {
+  cell:        'bingo-card__cell',
+  center:      'bingo-card__cell--center',
+  marked:      'bingo-card__cell--marked',
+  won:         'bingo-card__cell--won',
+  bannerShow:  'banner--visible',
+};
+
 
 /* ============================================================
    SPIELZUSTAND
@@ -88,20 +99,20 @@ function buildCard() {
   const shuffled = shuffle(TERMS);
   const grid     = document.getElementById('grid');
 
-  grid.innerHTML   = '';
-  markedCells      = new Set();
-  bingoTriggered   = false;
+  grid.innerHTML = '';
+  markedCells    = new Set();
+  bingoTriggered = false;
   updateCounter();
 
   for (let i = 0; i < 25; i++) {
     const cell = document.createElement('div');
-    cell.classList.add('cell');
+    cell.classList.add(CLASS.cell);
     cell.dataset.index = i;
 
     if (i === CENTER_INDEX) {
-      // Fixes Mittelfeld – Text kommt aus index.html via data-label
-      cell.classList.add('center');
-      cell.textContent = grid.dataset.centerLabel || 'Trottel-TV Bingo!';
+      // Fixes Mittelfeld – Text aus data-center-label
+      cell.classList.add(CLASS.center);
+      cell.textContent = grid.dataset.centerLabel || 'BINGO';
     } else {
       // Normales Feld – Begriff aus gemischter Liste
       // Indizes 0–11 → shuffled[0–11], Indizes 13–24 → shuffled[12–23]
@@ -124,10 +135,10 @@ function toggleCell(cell, index) {
 
   if (markedCells.has(index)) {
     markedCells.delete(index);
-    cell.classList.remove('marked');
+    cell.classList.remove(CLASS.marked);
   } else {
     markedCells.add(index);
-    cell.classList.add('marked');
+    cell.classList.add(CLASS.marked);
   }
 
   updateCounter();
@@ -188,13 +199,13 @@ function checkBingo() {
 function triggerBingo() {
   bingoTriggered = true;
 
-  const centerCell = document.querySelector('.cell.center');
+  const centerCell = document.querySelector('.' + CLASS.center);
   if (centerCell) {
-    centerCell.classList.add('bingo-won');
+    centerCell.classList.add(CLASS.won);
   }
 
   setTimeout(() => {
-    document.getElementById('bingo-banner').classList.add('show');
+    document.getElementById('bingo-banner').classList.add(CLASS.bannerShow);
   }, 400);
 }
 
@@ -204,7 +215,7 @@ function triggerBingo() {
    ============================================================ */
 
 function dismissBanner() {
-  document.getElementById('bingo-banner').classList.remove('show');
+  document.getElementById('bingo-banner').classList.remove(CLASS.bannerShow);
 }
 
 
@@ -217,7 +228,6 @@ function startGame() {
   document.getElementById('game-screen').style.display  = 'flex';
   buildCard();
 }
-
 
 function newCard() {
   buildCard();

@@ -1,7 +1,7 @@
 /*
  * ============================================================
- *  Trottel-TV Bingo – Stylesheet
- *  Schriften, Farben und Layout
+ *  Trottel-TV Bingo – Stylesheet (BEM)
+ *  Version: 2026-08-03 10:30
  * ============================================================
  */
 
@@ -15,32 +15,32 @@
 :root {
 
   /* Farben */
-  --color-bg:         #1a1a2e;   /* Seitenhintergrund */
-  --color-card:       #16213e;   /* Zellenfarbe */
-  --color-marked:     #0f3460;   /* Markierte Zelle */
-  --color-accent:     #e94560;   /* Rot-Akzent (Buttons, Hover) */
-  --color-gold:       #f5c518;   /* Gold (Mittelfeld, Gewinn) */
-  --color-text:       #eaeaea;   /* Haupttextfarbe */
-  --color-muted:      #7a7a9a;   /* Gedämpfter Text */
-  --color-border:     #2a2a4a;   /* Zellrahmen */
+  --color-bg:             #1a1a2e;   /* Seitenhintergrund */
+  --color-card:           #16213e;   /* Zellenfarbe */
+  --color-marked:         #0f3460;   /* Markierte Zelle */
+  --color-accent:         #e94560;   /* Rot-Akzent (Buttons, Hover) */
+  --color-gold:           #f5c518;   /* Gold (Mittelfeld, Gewinn) */
+  --color-text:           #eaeaea;   /* Haupttextfarbe */
+  --color-muted:          #7a7a9a;   /* Gedämpfter Text */
+  --color-border:         #2a2a4a;   /* Zellrahmen */
 
   /* Schriften */
-  --font-display:     'Bebas Neue', sans-serif;   /* Für Logo und Titel */
-  --font-body:        'Roboto Condensed', sans-serif; /* Für alle Inhalte */
+  --font-display:         'Bebas Neue', sans-serif;       /* Logo und Titel */
+  --font-body:            'Roboto Condensed', sans-serif; /* Alle Inhalte */
 
-  /* Schriftgrössen (rem-basiert, skaliert mit Browser-Grundgrösse) */
-  --fs-logo:          clamp(4rem, 18vw, 10rem);   /* Grosses BINGO-Logo */
-  --fs-game-logo:     clamp(1.6rem, 5vw, 2.8rem); /* Kopfzeile Spielseite */
-  --fs-cell:          clamp(0.75rem, 1.6vw, 1rem); /* Zelltext */
-  --fs-cell-center:   clamp(0.6rem, 1.3vw, 0.85rem); /* Mittelfeld-Text */
-  --fs-button:        clamp(0.9rem, 2.5vw, 1.2rem);
-  --fs-small:         clamp(0.65rem, 1.3vw, 0.8rem);
-  --fs-banner:        clamp(5rem, 18vw, 9rem);
+  /* Schriftgrössen (rem + clamp für fluid scaling) */
+  --fs-logo:              clamp(4rem, 18vw, 10rem);
+  --fs-game-logo:         clamp(1.6rem, 5vw, 2.8rem);
+  --fs-cell:              clamp(0.75rem, 2.5vw, 1.5rem);
+  --fs-cell-center:       clamp(1rem, 3vw, 2rem);
+  --fs-button:            clamp(0.9rem, 2.5vw, 1.2rem);
+  --fs-small:             clamp(0.7rem, 1.4vw, 0.85rem);
+  --fs-banner:            clamp(5rem, 18vw, 9rem);
 
   /* Layout */
-  --max-width:        800px;
-  --grid-gap:         6px;
-  --radius:           10px;
+  --max-width:            800px;
+  --grid-gap:             6px;
+  --radius:               10px;
 
 }
 
@@ -68,10 +68,10 @@ body {
 
 
 /* ============================================================
-   STARTSEITE
+   BLOCK: start-screen
    ============================================================ */
 
-#start-screen {
+.start-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -81,7 +81,7 @@ body {
   text-align: center;
 }
 
-.logo {
+.start-screen__logo {
   font-family: var(--font-display);
   font-size: var(--fs-logo);
   line-height: 0.9;
@@ -93,7 +93,7 @@ body {
   background-clip: text;
 }
 
-.tagline {
+.start-screen__tagline {
   font-size: var(--fs-small);
   color: var(--color-muted);
   letter-spacing: 0.15em;
@@ -101,7 +101,7 @@ body {
   margin-bottom: 3rem;
 }
 
-.start-btn {
+.start-screen__btn {
   background: linear-gradient(135deg, var(--color-accent), #c73652);
   color: #fff;
   border: none;
@@ -116,16 +116,16 @@ body {
   box-shadow: 0 4px 24px rgba(233, 69, 96, 0.4);
 }
 
-.start-btn:hover {
+.start-screen__btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 32px rgba(233, 69, 96, 0.5);
 }
 
-.start-btn:active {
+.start-screen__btn:active {
   transform: translateY(0);
 }
 
-.hint {
+.start-screen__hint {
   margin-top: 1.5rem;
   font-size: var(--fs-small);
   color: var(--color-muted);
@@ -133,16 +133,21 @@ body {
 
 
 /* ============================================================
-   SPIELSEITE
+   BLOCK: game-screen
    ============================================================ */
 
-#game-screen {
+.game-screen {
   display: none;
   flex-direction: column;
   align-items: center;
   padding: 1.5rem 1rem 2.5rem;
   min-height: 100vh;
 }
+
+
+/* ============================================================
+   BLOCK: game-header
+   ============================================================ */
 
 .game-header {
   display: flex;
@@ -153,7 +158,7 @@ body {
   margin-bottom: 1.25rem;
 }
 
-.game-logo {
+.game-header__logo {
   font-family: var(--font-display);
   font-size: var(--fs-game-logo);
   letter-spacing: 0.08em;
@@ -163,7 +168,7 @@ body {
   background-clip: text;
 }
 
-.new-card-btn {
+.game-header__btn {
   background: transparent;
   color: var(--color-muted);
   border: 1px solid var(--color-muted);
@@ -175,17 +180,17 @@ body {
   font-family: var(--font-body);
 }
 
-.new-card-btn:hover {
+.game-header__btn:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
 }
 
 
 /* ============================================================
-   BINGO-GRID & ZELLEN
+   BLOCK: bingo-card
    ============================================================ */
 
-.bingo-grid {
+.bingo-card {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: var(--grid-gap);
@@ -193,7 +198,8 @@ body {
   max-width: var(--max-width);
 }
 
-.cell {
+/* Element: bingo-card__cell */
+.bingo-card__cell {
   background: var(--color-card);
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius);
@@ -206,7 +212,6 @@ body {
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, transform 0.1s;
 
-  /* Schrift */
   font-family: var(--font-body);
   font-weight: 400;
   font-size: var(--fs-cell);
@@ -224,23 +229,23 @@ body {
   overflow: hidden;
 }
 
-.cell:hover:not(.center):not(.marked) {
+.bingo-card__cell:hover:not(.bingo-card__cell--center):not(.bingo-card__cell--marked) {
   border-color: var(--color-accent);
   background: #1f1f3a;
 }
 
-.cell:active:not(.center) {
+.bingo-card__cell:active:not(.bingo-card__cell--center) {
   transform: scale(0.95);
 }
 
-/* Markierte Zelle */
-.cell.marked {
+/* Modifier: --marked */
+.bingo-card__cell--marked {
   background: var(--color-marked);
   border-color: var(--color-accent);
   color: #fff;
 }
 
-.cell.marked::after {
+.bingo-card__cell--marked::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -248,8 +253,8 @@ body {
   pointer-events: none;
 }
 
-/* Mittelfeld (fixes Feld) */
-.cell.center {
+/* Modifier: --center (fixes Mittelfeld) */
+.bingo-card__cell--center {
   background: linear-gradient(135deg, #1a3a1a, #0d2a0d);
   border-color: var(--color-gold);
   cursor: default;
@@ -260,8 +265,8 @@ body {
   line-height: 1.15;
 }
 
-/* Mittelfeld – Gewinn-Zustand */
-.cell.center.bingo-won {
+/* Modifier: --won (Gewinn-Zustand auf Mittelfeld) */
+.bingo-card__cell--won {
   background: linear-gradient(135deg, #2a6a00, var(--color-gold));
   border-color: var(--color-gold);
   color: #fff;
@@ -275,7 +280,7 @@ body {
 
 
 /* ============================================================
-   ZÄHLER
+   BLOCK: counter
    ============================================================ */
 
 .counter {
@@ -286,17 +291,17 @@ body {
   font-family: var(--font-body);
 }
 
-.counter span {
+.counter__value {
   color: var(--color-accent);
   font-weight: 700;
 }
 
 
 /* ============================================================
-   GEWINN-BANNER (Overlay)
+   BLOCK: banner (Gewinn-Overlay)
    ============================================================ */
 
-#bingo-banner {
+.banner {
   display: none;
   position: fixed;
   inset: 0;
@@ -308,11 +313,11 @@ body {
   gap: 1rem;
 }
 
-#bingo-banner.show {
+.banner--visible {
   display: flex;
 }
 
-.banner-text {
+.banner__text {
   font-family: var(--font-display);
   font-size: var(--fs-banner);
   letter-spacing: 0.1em;
@@ -328,13 +333,13 @@ body {
   to   { transform: scale(1);   opacity: 1; }
 }
 
-.banner-sub {
+.banner__sub {
   font-size: clamp(0.875rem, 2.5vw, 1.125rem);
   color: var(--color-muted);
   font-family: var(--font-body);
 }
 
-.dismiss-btn {
+.banner__btn {
   background: var(--color-accent);
   color: #fff;
   border: none;
