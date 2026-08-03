@@ -2,10 +2,7 @@
 <html lang="de">
 <head>
   <!--
-    ============================================================
-    Trottel-TV Bingo
-    Version: 2026-08-03 16:00
-    ============================================================
+    Trottel-TV Bingo · Version: 2026-08-03 18:00
   -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,39 +11,30 @@
 </head>
 <body>
 
-  <!-- STARTSEITE -->
   <div id="start-screen" class="start-screen">
     <div class="start-screen__logo">BINGO</div>
     <div class="start-screen__tagline">Jede Karte ist einmalig</div>
     <button type="button" class="start-screen__btn" onclick="startGame()">Bingo starten</button>
-    <p class="start-screen__hint">Die 25 Felder werden zufällig gemischt</p>
+    <p class="start-screen__hint">25 Felder werden zufällig aus dem Pool gemischt</p>
   </div>
 
-
-  <!-- SPIELSEITE -->
   <div id="game-screen" class="game-screen">
-
     <div class="game-header">
-      <div class="game-header__logo">Trottel-TV Bingo</div>
+      <div class="game-header__logo" id="game-title">Trottel-TV Bingo</div>
       <button type="button" class="game-header__btn" onclick="newCard()">↺ Neue Karte</button>
     </div>
-
+    <div class="edition-selector" id="edition-selector"></div>
     <div class="bingo-card" id="grid"></div>
-
     <div class="counter">
       <span class="counter__value" id="marked-count">0</span> von 25 Feldern markiert
     </div>
-
   </div>
 
-
-  <!-- GEWINN-BANNER (Overlay) -->
   <div id="bingo-banner" class="banner">
     <div class="banner__text">BINGO!</div>
     <div class="banner__sub">Glückwunsch! 🎉</div>
     <button type="button" class="banner__btn" onclick="dismissBanner()">Weiter spielen</button>
   </div>
-
 
   <script src="assets/bingo.js"></script>
   <script>initGame();</script>
