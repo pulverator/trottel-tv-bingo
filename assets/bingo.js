@@ -1,14 +1,12 @@
 /**
  * ============================================================
  *  Trottel-TV Bingo – Spiellogik
- *  Version: 2026-08-03 10:30
+ *  Version: 2026-08-03 16:00
  * ============================================================
  *
  *  BEGRIFFE ANPASSEN:
  *  Einfach die Einträge im TERMS-Array unten bearbeiten.
- *  Es müssen genau 24 Begriffe sein (das Mittelfeld zählt nicht).
- *  Der Text im Mittelfeld wird in index.html via
- *  data-center-label="..." gesetzt.
+ *  Es müssen genau 25 Begriffe sein.
  *
  * ============================================================
  */
@@ -16,7 +14,7 @@
 
 /* ============================================================
    BEGRIFFE – hier anpassen
-   Genau 24 Einträge (Mittelfeld ist fix in index.html)
+   Genau 25 Einträge
    ============================================================ */
 
 const TERMS = [
@@ -52,16 +50,14 @@ const TERMS = [
    KONFIGURATION
    ============================================================ */
 
-// Position des fixen Mittelfeldes im 5×5-Raster (0-basiert, 12 = Mitte)
-const CENTER_INDEX = 12;
+// localStorage Key
+const STORAGE_KEY = 'trottel-bingo-state';
 
-// BEM-Klassen (hier zentral damit JS und CSS synchron bleiben)
+// BEM-Klassen
 const CLASS = {
-  cell:        'bingo-card__cell',
-  center:      'bingo-card__cell--center',
-  marked:      'bingo-card__cell--marked',
-  won:         'bingo-card__cell--won',
-  bannerShow:  'banner--visible',
+  cell:       'bingo-card__cell',
+  marked:     'bingo-card__cell--marked',
+  bannerShow: 'banner--visible',
 };
 
 
@@ -74,13 +70,37 @@ let bingoTriggered = false;
 
 
 /* ============================================================
+   LOCALSTORAGE
+   ============================================================ */
+
+function saveState(shuffledTerms) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      terms:  shuffledTerms,
+      marked: [...markedCells],
+      bingo:  bingoTriggered,
+    }));
+  } catch (e) {}
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function clearState() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+}
+
+
+/* ============================================================
    HILFSFUNKTIONEN
    ============================================================ */
 
-/**
- * Mischt ein Array zufällig (Fisher-Yates).
- * Gibt eine neue gemischte Kopie zurück, verändert das Original nicht.
- */
 function shuffle(array) {
   const copy = [...array];
   for (let i = copy.length - 1; i > 0; i--) {
@@ -95,34 +115,30 @@ function shuffle(array) {
    KARTE AUFBAUEN
    ============================================================ */
 
-function buildCard() {
-  const shuffled = shuffle(TERMS);
+function buildCard(savedTerms = null, savedMarked = [], savedBingo = false) {
+  const shuffled = savedTerms || shuffle(TERMS);
   const grid     = document.getElementById('grid');
 
   grid.innerHTML = '';
-  markedCells    = new Set();
-  bingoTriggered = false;
+  markedCells    = new Set(savedMarked);
+  bingoTriggered = savedBingo;
   updateCounter();
 
   for (let i = 0; i < 25; i++) {
     const cell = document.createElement('div');
     cell.classList.add(CLASS.cell);
     cell.dataset.index = i;
+    cell.textContent   = shuffled[i];
 
-    if (i === CENTER_INDEX) {
-      // Fixes Mittelfeld – Text aus data-center-label
-      cell.classList.add(CLASS.center);
-      cell.textContent = grid.dataset.centerLabel || 'BINGO';
-    } else {
-      // Normales Feld – Begriff aus gemischter Liste
-      // Indizes 0–11 → shuffled[0–11], Indizes 13–24 → shuffled[12–23]
-      const termIndex  = i < CENTER_INDEX ? i : i - 1;
-      cell.textContent = shuffled[termIndex];
-      cell.addEventListener('click', () => toggleCell(cell, i));
+    if (markedCells.has(i)) {
+      cell.classList.add(CLASS.marked);
     }
 
+    cell.addEventListener('click', () => toggleCell(cell, i, shuffled));
     grid.appendChild(cell);
   }
+
+  saveState(shuffled);
 }
 
 
@@ -130,9 +146,7 @@ function buildCard() {
    ZELLE UMSCHALTEN
    ============================================================ */
 
-function toggleCell(cell, index) {
-  if (index === CENTER_INDEX) return;
-
+function toggleCell(cell, index, shuffled) {
   if (markedCells.has(index)) {
     markedCells.delete(index);
     cell.classList.remove(CLASS.marked);
@@ -142,6 +156,7 @@ function toggleCell(cell, index) {
   }
 
   updateCounter();
+  saveState(shuffled);
   checkBingo();
 }
 
@@ -156,8 +171,7 @@ function updateCounter() {
 
 
 /* ============================================================
-   BINGO PRÜFEN
-   Alle möglichen Gewinnlinien in einem 5×5-Raster
+   BINGO PRÜFEN – alle Linien brauchen genau 5 Felder
    ============================================================ */
 
 function checkBingo() {
@@ -181,10 +195,8 @@ function checkBingo() {
     [4,  8,  12, 16, 20],
   ];
 
-  const isMarked = (i) => i === CENTER_INDEX || markedCells.has(i);
-
   for (const line of lines) {
-    if (line.every(isMarked)) {
+    if (line.every(i => markedCells.has(i))) {
       triggerBingo();
       return;
     }
@@ -198,12 +210,6 @@ function checkBingo() {
 
 function triggerBingo() {
   bingoTriggered = true;
-
-  const centerCell = document.querySelector('.' + CLASS.center);
-  if (centerCell) {
-    centerCell.classList.add(CLASS.won);
-  }
-
   setTimeout(() => {
     document.getElementById('bingo-banner').classList.add(CLASS.bannerShow);
   }, 400);
@@ -224,11 +230,35 @@ function dismissBanner() {
    ============================================================ */
 
 function startGame() {
+  // Session als aktiv markieren – überlebt einen Reload aber nicht Tab schliessen
+  sessionStorage.setItem('bingo-active', '1');
+
   document.getElementById('start-screen').style.display = 'none';
   document.getElementById('game-screen').style.display  = 'flex';
+
+  // Startseite = bewusster Neustart → immer frische Karte
+  clearState();
   buildCard();
 }
 
+/**
+ * Wird beim Laden der Seite aufgerufen.
+ * Nur bei einem Reload (sessionStorage aktiv) wird die gespeicherte Karte
+ * wiederhergestellt. Bei neuem Tab oder direktem Aufruf erscheint die Startseite.
+ */
+function initGame() {
+  const isReload = sessionStorage.getItem('bingo-active');
+  const state    = loadState();
+
+  if (isReload && state) {
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('game-screen').style.display  = 'flex';
+    buildCard(state.terms, state.marked, state.bingo);
+  }
+  // Sonst: Startseite anzeigen (Standard)
+}
+
 function newCard() {
+  clearState();
   buildCard();
 }

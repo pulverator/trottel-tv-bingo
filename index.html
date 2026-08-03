@@ -4,7 +4,7 @@
   <!--
     ============================================================
     Trottel-TV Bingo
-    Version: 2026-08-03 10:30
+    Version: 2026-08-03 16:00
     ============================================================
   -->
   <meta charset="UTF-8">
@@ -18,7 +18,7 @@
   <div id="start-screen" class="start-screen">
     <div class="start-screen__logo">BINGO</div>
     <div class="start-screen__tagline">Jede Karte ist einmalig</div>
-    <button class="start-screen__btn" onclick="startGame()">Bingo starten</button>
+    <button type="button" class="start-screen__btn" onclick="startGame()">Bingo starten</button>
     <p class="start-screen__hint">Die 25 Felder werden zufällig gemischt</p>
   </div>
 
@@ -28,20 +28,13 @@
 
     <div class="game-header">
       <div class="game-header__logo">Trottel-TV Bingo</div>
-      <button class="game-header__btn" onclick="newCard()">↺ Neue Karte</button>
+      <button type="button" class="game-header__btn" onclick="newCard()">↺ Neue Karte</button>
     </div>
 
-    <!--
-      data-center-label: Text im fixen Mittelfeld.
-      Hier anpassen wenn du den Mittelfeld-Text ändern möchtest.
-    -->
-    <div class="bingo-card"
-         id="grid"
-         data-center-label="Trottel-TV Bingo!">
-    </div>
+    <div class="bingo-card" id="grid"></div>
 
     <div class="counter">
-      <span class="counter__value" id="marked-count">0</span> von 24 Feldern markiert
+      <span class="counter__value" id="marked-count">0</span> von 25 Feldern markiert
     </div>
 
   </div>
@@ -51,11 +44,12 @@
   <div id="bingo-banner" class="banner">
     <div class="banner__text">BINGO!</div>
     <div class="banner__sub">Glückwunsch! 🎉</div>
-    <button class="banner__btn" onclick="dismissBanner()">Weiter spielen</button>
+    <button type="button" class="banner__btn" onclick="dismissBanner()">Weiter spielen</button>
   </div>
 
 
   <script src="assets/bingo.js"></script>
+  <script>initGame();</script>
 
 </body>
 </html>

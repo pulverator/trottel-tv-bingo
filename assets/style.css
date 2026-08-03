@@ -1,7 +1,7 @@
 /*
  * ============================================================
  *  Trottel-TV Bingo – Stylesheet (BEM)
- *  Version: 2026-08-03 10:30
+ *  Version: 2026-08-03 16:00
  * ============================================================
  */
 
@@ -19,7 +19,7 @@
   --color-card:           #16213e;   /* Zellenfarbe */
   --color-marked:         #0f3460;   /* Markierte Zelle */
   --color-accent:         #e94560;   /* Rot-Akzent (Buttons, Hover) */
-  --color-gold:           #f5c518;   /* Gold (Mittelfeld, Gewinn) */
+  --color-gold:           #f5c518;   /* Gold (Logo, Banner) */
   --color-text:           #eaeaea;   /* Haupttextfarbe */
   --color-muted:          #7a7a9a;   /* Gedämpfter Text */
   --color-border:         #2a2a4a;   /* Zellrahmen */
@@ -32,7 +32,6 @@
   --fs-logo:              clamp(4rem, 18vw, 10rem);
   --fs-game-logo:         clamp(1.6rem, 5vw, 2.8rem);
   --fs-cell:              clamp(0.75rem, 2.5vw, 1.5rem);
-  --fs-cell-center:       clamp(1rem, 3vw, 2rem);
   --fs-button:            clamp(0.9rem, 2.5vw, 1.2rem);
   --fs-small:             clamp(0.7rem, 1.4vw, 0.85rem);
   --fs-banner:            clamp(5rem, 18vw, 9rem);
@@ -229,12 +228,12 @@ body {
   overflow: hidden;
 }
 
-.bingo-card__cell:hover:not(.bingo-card__cell--center):not(.bingo-card__cell--marked) {
+.bingo-card__cell:hover:not(.bingo-card__cell--marked) {
   border-color: var(--color-accent);
   background: #1f1f3a;
 }
 
-.bingo-card__cell:active:not(.bingo-card__cell--center) {
+.bingo-card__cell:active {
   transform: scale(0.95);
 }
 
@@ -251,31 +250,6 @@ body {
   inset: 0;
   background: radial-gradient(circle, rgba(233, 69, 96, 0.15) 0%, transparent 70%);
   pointer-events: none;
-}
-
-/* Modifier: --center (fixes Mittelfeld) */
-.bingo-card__cell--center {
-  background: linear-gradient(135deg, #1a3a1a, #0d2a0d);
-  border-color: var(--color-gold);
-  cursor: default;
-  font-family: var(--font-display);
-  font-size: var(--fs-cell-center);
-  letter-spacing: 0.06em;
-  color: var(--color-gold);
-  line-height: 1.15;
-}
-
-/* Modifier: --won (Gewinn-Zustand auf Mittelfeld) */
-.bingo-card__cell--won {
-  background: linear-gradient(135deg, #2a6a00, var(--color-gold));
-  border-color: var(--color-gold);
-  color: #fff;
-  animation: pulse-gold 1s ease-in-out infinite;
-}
-
-@keyframes pulse-gold {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 197, 24, 0.5); }
-  50%       { box-shadow: 0 0 0 12px rgba(245, 197, 24, 0); }
 }
 
 
