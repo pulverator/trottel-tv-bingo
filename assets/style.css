@@ -1,0 +1,348 @@
+/*
+ * ============================================================
+ *  Trottel-TV Bingo – Stylesheet
+ *  Schriften, Farben und Layout
+ * ============================================================
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Condensed:wght@400;700&display=swap');
+
+
+/* ============================================================
+   CSS CUSTOM PROPERTIES (Designvariablen)
+   ============================================================ */
+
+:root {
+
+  /* Farben */
+  --color-bg:         #1a1a2e;   /* Seitenhintergrund */
+  --color-card:       #16213e;   /* Zellenfarbe */
+  --color-marked:     #0f3460;   /* Markierte Zelle */
+  --color-accent:     #e94560;   /* Rot-Akzent (Buttons, Hover) */
+  --color-gold:       #f5c518;   /* Gold (Mittelfeld, Gewinn) */
+  --color-text:       #eaeaea;   /* Haupttextfarbe */
+  --color-muted:      #7a7a9a;   /* Gedämpfter Text */
+  --color-border:     #2a2a4a;   /* Zellrahmen */
+
+  /* Schriften */
+  --font-display:     'Bebas Neue', sans-serif;   /* Für Logo und Titel */
+  --font-body:        'Roboto Condensed', sans-serif; /* Für alle Inhalte */
+
+  /* Schriftgrössen (rem-basiert, skaliert mit Browser-Grundgrösse) */
+  --fs-logo:          clamp(4rem, 18vw, 10rem);   /* Grosses BINGO-Logo */
+  --fs-game-logo:     clamp(1.6rem, 5vw, 2.8rem); /* Kopfzeile Spielseite */
+  --fs-cell:          clamp(0.75rem, 1.6vw, 1rem); /* Zelltext */
+  --fs-cell-center:   clamp(0.6rem, 1.3vw, 0.85rem); /* Mittelfeld-Text */
+  --fs-button:        clamp(0.9rem, 2.5vw, 1.2rem);
+  --fs-small:         clamp(0.65rem, 1.3vw, 0.8rem);
+  --fs-banner:        clamp(5rem, 18vw, 9rem);
+
+  /* Layout */
+  --max-width:        800px;
+  --grid-gap:         6px;
+  --radius:           10px;
+
+}
+
+
+/* ============================================================
+   RESET & BASIS
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: var(--font-body);
+  font-weight: 400;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+
+/* ============================================================
+   STARTSEITE
+   ============================================================ */
+
+#start-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2.5rem 1.25rem;
+  text-align: center;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: var(--fs-logo);
+  line-height: 0.9;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tagline {
+  font-size: var(--fs-small);
+  color: var(--color-muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 3rem;
+}
+
+.start-btn {
+  background: linear-gradient(135deg, var(--color-accent), #c73652);
+  color: #fff;
+  border: none;
+  padding: 1.1rem 3.5rem;
+  font-size: var(--fs-button);
+  font-weight: 700;
+  font-family: var(--font-body);
+  border-radius: 50px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 24px rgba(233, 69, 96, 0.4);
+}
+
+.start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(233, 69, 96, 0.5);
+}
+
+.start-btn:active {
+  transform: translateY(0);
+}
+
+.hint {
+  margin-top: 1.5rem;
+  font-size: var(--fs-small);
+  color: var(--color-muted);
+}
+
+
+/* ============================================================
+   SPIELSEITE
+   ============================================================ */
+
+#game-screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem 2.5rem;
+  min-height: 100vh;
+}
+
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--max-width);
+  margin-bottom: 1.25rem;
+}
+
+.game-logo {
+  font-family: var(--font-display);
+  font-size: var(--fs-game-logo);
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.new-card-btn {
+  background: transparent;
+  color: var(--color-muted);
+  border: 1px solid var(--color-muted);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: var(--fs-small);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  font-family: var(--font-body);
+}
+
+.new-card-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+
+/* ============================================================
+   BINGO-GRID & ZELLEN
+   ============================================================ */
+
+.bingo-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--grid-gap);
+  width: 100%;
+  max-width: var(--max-width);
+}
+
+.cell {
+  background: var(--color-card);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius);
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.4rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.1s;
+
+  /* Schrift */
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-cell);
+  line-height: 1.25;
+
+  /* Zeilenumbruch & Silbentrennung für Mobile */
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.cell:hover:not(.center):not(.marked) {
+  border-color: var(--color-accent);
+  background: #1f1f3a;
+}
+
+.cell:active:not(.center) {
+  transform: scale(0.95);
+}
+
+/* Markierte Zelle */
+.cell.marked {
+  background: var(--color-marked);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.cell.marked::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(233, 69, 96, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Mittelfeld (fixes Feld) */
+.cell.center {
+  background: linear-gradient(135deg, #1a3a1a, #0d2a0d);
+  border-color: var(--color-gold);
+  cursor: default;
+  font-family: var(--font-display);
+  font-size: var(--fs-cell-center);
+  letter-spacing: 0.06em;
+  color: var(--color-gold);
+  line-height: 1.15;
+}
+
+/* Mittelfeld – Gewinn-Zustand */
+.cell.center.bingo-won {
+  background: linear-gradient(135deg, #2a6a00, var(--color-gold));
+  border-color: var(--color-gold);
+  color: #fff;
+  animation: pulse-gold 1s ease-in-out infinite;
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 197, 24, 0.5); }
+  50%       { box-shadow: 0 0 0 12px rgba(245, 197, 24, 0); }
+}
+
+
+/* ============================================================
+   ZÄHLER
+   ============================================================ */
+
+.counter {
+  margin-top: 1rem;
+  font-size: var(--fs-small);
+  color: var(--color-muted);
+  letter-spacing: 0.1em;
+  font-family: var(--font-body);
+}
+
+.counter span {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   GEWINN-BANNER (Overlay)
+   ============================================================ */
+
+#bingo-banner {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#bingo-banner.show {
+  display: flex;
+}
+
+.banner-text {
+  font-family: var(--font-display);
+  font-size: var(--fs-banner);
+  letter-spacing: 0.1em;
+  background: linear-gradient(135deg, var(--color-gold), var(--color-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pop-in {
+  from { transform: scale(0.3); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.banner-sub {
+  font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+  color: var(--color-muted);
+  font-family: var(--font-body);
+}
+
+.dismiss-btn {
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  padding: 0.875rem 2.5rem;
+  border-radius: 30px;
+  font-size: clamp(0.875rem, 2vw, 1.05rem);
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  font-family: var(--font-body);
+}

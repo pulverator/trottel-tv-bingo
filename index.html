@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trottel-TV Bingo</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       STARTSEITE
+       ============================================================ -->
+  <div id="start-screen">
+    <div class="logo">BINGO</div>
+    <div class="tagline">Jede Karte ist einmalig</div>
+    <button class="start-btn" onclick="startGame()">Bingo starten</button>
+    <p class="hint">Die 25 Felder werden zufällig gemischt</p>
+  </div>
+
+
+  <!-- ============================================================
+       SPIELSEITE
+       ============================================================ -->
+  <div id="game-screen">
+
+    <div class="game-header">
+      <div class="game-logo">Trottel-TV Bingo</div>
+      <button class="new-card-btn" onclick="newCard()">↺ Neue Karte</button>
+    </div>
+
+    <!--
+      data-center-label: Text im fixen Mittelfeld.
+      Hier anpassen wenn du den Mittelfeld-Text ändern möchtest.
+    -->
+    <div class="bingo-grid"
+         id="grid"
+         data-center-label="Trottel-TV Bingo!">
+    </div>
+
+    <div class="counter">
+      <span id="marked-count">0</span> von 24 Feldern markiert
+    </div>
+
+  </div>
+
+
+  <!-- ============================================================
+       GEWINN-BANNER (Overlay)
+       ============================================================ -->
+  <div id="bingo-banner">
+    <div class="banner-text">BINGO!</div>
+    <div class="banner-sub">Glückwunsch! 🎉</div>
+    <button class="dismiss-btn" onclick="dismissBanner()">Weiter spielen</button>
+  </div>
+
+
+  <script src="assets/bingo.js"></script>
+
+</body>
+</html>
