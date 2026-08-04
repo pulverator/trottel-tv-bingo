@@ -92,6 +92,11 @@ body {
   background-clip: text;
 }
 
+.start-screen__logo > span {
+  font-size: 0.45em;
+  font-weight: 500;
+}
+
 .start-screen__tagline {
   font-size: var(--fs-small);
   color: var(--color-muted);
